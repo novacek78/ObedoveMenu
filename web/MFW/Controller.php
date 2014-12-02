@@ -9,6 +9,8 @@
 class MFW_Controller {
 
     protected $_Request;
+    protected $_View;
+    protected $_contents = array();
 
 
     /**
@@ -18,4 +20,12 @@ class MFW_Controller {
 
         $this->_Request = $Request;
     }
-} 
+
+    /**
+     * Spusti beh controllera
+     */
+    public function run()
+    {
+
+    }
+}
