@@ -10,7 +10,6 @@ class MFW_Controller {
 
     protected $_Request;
     protected $_View;
-    protected $_contents = array();
 
 
     /**

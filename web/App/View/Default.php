@@ -9,4 +9,10 @@
 class App_View_Default extends MFW_View
 {
 
-} 
+    public function render()
+    {
+
+        echo '<h1>' . $this->titulok . '</h1>';
+        echo '<p>' . $this->clanok . '</p>';
+    }
+}
