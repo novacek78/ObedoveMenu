@@ -1,0 +1,32 @@
+ErrorDocument 404 "http://sluzbyludom.bt/"
+
+# Turn on Rewrite mode
+RewriteEngine on
+RewriteBase /
+
+# Presmerovanie domena.tld na http://www.domena.tld/
+#RewriteCond %{HTTP_HOST} !^www\. [NC]
+#RewriteRule ^(.*)$ http://www\.%{HTTP_HOST}/$1 [R=301,NC]
+
+# pozn.: V adrese www.yoyo.com/index.php?p1=1&p2=2 sa nachadzaju tieto zlozky:
+# %{HTTPS} = off|on
+# %{HTTP_HOST} = www.yoyo.com
+# %{REQUEST_URI} = /index.php
+# %{QUERY_STRING} = p1=1&p2=2
+# plny zoznam tu: http://www.askapache.com/htaccess/mod_rewrite-variables-cheatsheet.html
+
+# transformacia zapisu parametrov cez lomitka na GET parametre (momentalne podpora max. 4 parametrov)
+RewriteRule /([^/]+)/([^/]+)?/?([^/]+)?/?([^/]+)?/? ?p1=$1&p2=$2&p3=$3&p4=$4 [NC,L]
+
+# Nastavenie prostredia
+#DEVELOPMENT | TESTING | PRODUCTION
+SetEnv APPLICATION_ENV  DEVELOPMENT
+SetEnv APP_PATH         app
+SetEnv FW_PATH          framework
+
+# Dotazy na subory a adresare
+#RewriteCond %{SCRIPT_FILENAME} !-f
+#RewriteCond %{SCRIPT_FILENAME} !-d
+#RewriteRule (.+)$|^$ index.php?uri=$1&ext= [QSA,NC,L]
+
+
