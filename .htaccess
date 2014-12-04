@@ -21,8 +21,8 @@ RewriteRule /([^/]+)/([^/]+)?/?([^/]+)?/?([^/]+)?/? ?p1=$1&p2=$2&p3=$3&p4=$4 [NC
 # Nastavenie prostredia
 #DEVELOPMENT | TESTING | PRODUCTION
 SetEnv APPLICATION_ENV  DEVELOPMENT
-SetEnv APP_PATH         app
-SetEnv FW_PATH          framework
+SetEnv APP_PATH         App
+SetEnv FW_PATH          MFW
 
 # Dotazy na subory a adresare
 #RewriteCond %{SCRIPT_FILENAME} !-f

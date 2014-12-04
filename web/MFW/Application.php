@@ -3,12 +3,10 @@
 class MFW_Application {
 
     protected $_Controller;
-    protected $_environment;
 
 
     public function __construct(){
 
-        $this->_environment = $_SERVER['APPLICATION_ENV'];
     }
 
 
