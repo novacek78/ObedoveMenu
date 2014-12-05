@@ -5,12 +5,12 @@ $e = $_SERVER['APPLICATION_ENV'];
 
 
 // default hodnoty
-$C['title'] = 'Dobry den!';
+$C['db_host'] = '';
+$C['db_username'] = '';
+$C['db_password'] = '';
 
 
 if ($e == 'DEVELOPMENT') {
-
-    $C['title'] = 'bleeeeeee :)))';
 
 } elseif ($e == 'TESTING') {
 

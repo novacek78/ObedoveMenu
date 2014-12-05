@@ -10,28 +10,39 @@ final class MFW_Config
 {
 
     protected static $_instance = NULL;
+    protected static $_loadedConfigs = NULL;
     protected static $_data = NULL;
 
 
     private function __construct()
     {
         // PRIVATE - aby nikto iny nemohol ziskat jeho instanciu
-
-        include_once $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'main.php';
-        self::$_data = $C;
     }
 
     /**
      * @return MFW_Config
      */
-    public static function getConfig()
+    public static function getConfig($cfgName)
     {
 
         if (self::$_instance == NULL) {
             self::$_instance = new MFW_Config();
         }
 
+        if (!isset(self::$_data[ $cfgName ])) self::_loadConfigFile($cfgName);
+
         return self::$_instance;
+    }
+
+    private function _loadConfigFile($cfgName)
+    {
+
+        include_once $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $cfgName . '.php';
+
+        if (is_array(self::$_data))
+            self::$_data = array_merge(self::$_data, $C);
+        else
+            self::$_data = $C;
     }
 
     public function __get($name)
