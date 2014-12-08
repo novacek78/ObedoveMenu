@@ -1,12 +1,4 @@
-<?php
-
-/**
- * Created by PhpStorm.
- * User: enovacek
- * Date: 2. 12. 2014
- * Time: 15:48
- */
-class App_Layout_Default_Content extends MFW_Layout
-{
-
-} 
+<h1><?php echo $V->titulok ?></h1>
+<p><?php echo $V->clanok ?></p>
+<p>LUDIA: <?php echo $V->arrayToHtml($V->ludia, '<p>Vek: #vek#, meno: #meno#</p>', true) ?></p>
+<p>LUDIA non associative: <?php echo $V->arrayToHtml($V->ludia, '<p>Vek: #1#, meno: #0#</p>') ?></p>

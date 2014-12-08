@@ -9,9 +9,17 @@
 class MFW_Layout
 {
 
+    protected $_name;
+    protected $_contents;
     protected $_cssFiles = array();
     protected $_jsFiles = array();
 
+
+    public function __construct($Data)
+    {
+
+        $this->_contents = $Data;
+    }
 
     public function compile()
     {

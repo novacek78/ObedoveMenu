@@ -1,10 +1,28 @@
-<Files *.php>
-    Order Deny,Allow
-    Deny from all
-    Allow from 127.0.0.1
-</Files>
 
-<Files index.php>
-    Order Allow,Deny
-    Allow from all
-</Files>
+# Nastavenie prostredia
+#DEVELOPMENT | TESTING | PRODUCTION
+SetEnv APPLICATION_ENV  DEVELOPMENT
+SetEnv APP_PATH         App
+SetEnv FW_PATH          MFW
+
+# Chybova stranka
+ErrorDocument 404 "http://sluzbyludom.bt/"
+
+# Turn on Rewrite mode
+RewriteEngine on
+RewriteBase /
+
+# Presmerovanie domena.tld na http://www.domena.tld/
+#RewriteCond %{HTTP_HOST} !^www\. [NC]
+#RewriteRule ^(.*)$ http://www\.%{HTTP_HOST}/$1 [R=301,NC]
+
+RewriteRule ^([^/]+)?/?([^/]+)?/?([^/]+)?/?([^/]+)?$ index.php?controller=$1&method=$2&p1=$3&p2=$4 [QSA,L]
+#RewriteRule ^([^/]+)/([^/]+)/([^/]+)/([^/]+)$ index.php?controller=$1&method=$2&p1=$3&p2=$4 [QSA,L]
+#RewriteRule ^([^/]+)/([^/]+)/([^/]+)$ index.php?controller=$1&method=$2&p1=$3 [QSA,L]
+#RewriteRule ^([^/]+)/([^/]+)$ index.php?controller=$1&method=$2 [QSA,L]
+#RewriteRule ^([^/]+)$ index.php?controller=$1 [QSA,L]
+
+# Dotazy na subory a adresare
+#RewriteCond %{SCRIPT_FILENAME} !-f
+#RewriteCond %{SCRIPT_FILENAME} !-d
+#RewriteRule (.+)$|^$ index.php?uri=$1&ext= [QSA,NC,L]

@@ -8,14 +8,14 @@
 
 class MFW_Request {
 
-    protected $_getParams = null;
+    protected $_getData = NULL;
     protected $_postData = null;
 
 
     public function __construct(){
 
         if (!empty($_GET)) {
-            $this->_getParams = $_GET;
+            $this->_getData = $_GET;
             unset($_GET);
         }
 
@@ -28,9 +28,8 @@ class MFW_Request {
 
     public function getGet($index){
 
-        $index = 'p'.$index;
-        if (isset($this->_getParams[$index]))
-            return $this->_getParams[$index];
+        if (isset($this->_getData[ $index ]))
+            return $this->_getData[ $index ];
         else
             return false;
     }

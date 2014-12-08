@@ -5,12 +5,12 @@ $e = $_SERVER['APPLICATION_ENV'];
 
 
 // default hodnoty
-$C['title'] = 'Dobry den!';
+$C['base_href'] = 'www.spapajma.sk';
 
 
 if ($e == 'DEVELOPMENT') {
 
-    $C['title'] = 'bleeeeeee :)))';
+    $C['base_href'] = 'sluzbyludom.bt';
 
 } elseif ($e == 'TESTING') {
 

@@ -1,12 +1,5 @@
-<?php
-
-/**
- * Created by PhpStorm.
- * User: enovacek
- * Date: 2. 12. 2014
- * Time: 15:48
- */
-class App_Layout_Default_Header extends MFW_Layout
-{
-
-} 
+<html>
+<head>
+    <title>SpapajMa - obedové menu vždy poruke</title>
+</head>
+<body>

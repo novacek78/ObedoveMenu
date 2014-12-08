@@ -21,7 +21,10 @@ class MFW_Application {
             $this->_Controller->run();
 
         } catch (Exception $e) {
-            echo "Vynimka : " . $e->getMessage();
+            $this->redirectToUri('/err');
+//            $ErrCtrl = new App_Controller_Error(new MFW_Request());
+//            $ErrCtrl->run();
+//            echo "Vynimka : " . $e->getMessage();
         }
     }
 
@@ -33,10 +36,18 @@ class MFW_Application {
 
         $Request = new MFW_Request();
 
-        $controllerName = ucfirst( ($Request->getGet(1)) ? $Request->getGet(1) : 'default' );
+        $controllerName = ucfirst(($Request->getGet('controller')) ? $Request->getGet('controller') : 'default');
 
-        $controllerClass = CONTROLLER_PREFIX . $controllerName;
+        $controllerClass = 'App_Controller_' . $controllerName;
+
         $this->_Controller = new $controllerClass($Request);
+    }
+
+    protected function redirectToUri($uri)
+    {
+
+        $uri = MFW_Config::getConfig('main')->base_href . $uri;
+        header('location: http://' . $uri);
     }
 
 }

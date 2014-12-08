@@ -45,12 +45,10 @@ function fatalHandler() {
 }
 
 
-
-
-
-
-
-
+function lg($msg)
+{
+//    $filePath =
+}
 
 /**
  * Vypise VAR_DUMP prijatych dat
