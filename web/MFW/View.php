@@ -9,7 +9,8 @@
 class MFW_View
 {
 
-    protected $_contents = array();
+    protected $_contentData = array();
+    protected $_resources = array();
     protected $_html = '';
 
 
@@ -24,13 +25,30 @@ class MFW_View
     public function __get($name)
     {
 
-        return $this->_contents[ $name ];
+        return $this->_contentData[ $name ];
     }
 
     public function __set($name, $value)
     {
 
-        $this->_contents[ $name ] = $value;
+        $this->_contentData[ $name ] = $value;
+    }
+
+    public function addResources($filename)
+    {
+
+        $ext = substr($filename, strrpos($filename, '.') + 1);
+
+        $this->_resources[ $ext ][] = MFW_Config::getConfig('main')->resources_dir . $filename;
+    }
+
+    public function getResources($type)
+    {
+
+        if (isset($this->_resources[ $type ]))
+            return $this->_resources[ $type ];
+        else
+            return array();
     }
 
     public function loadLayout($name)
@@ -75,8 +93,10 @@ class MFW_View
      * @param bool   $associativeArray
      * @return string
      */
-    private function arrayToHtml($pole, $htmlMarkup, $associativeArray = false)
+    private function arrayToHtml($pole, $htmlMarkup, $associativeArray = true)
     {
+        if (!is_array($pole)) exit;
+
         $result = '';
         foreach ($pole as $item) {
 

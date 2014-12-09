@@ -16,6 +16,8 @@ RewriteBase /
 #RewriteCond %{HTTP_HOST} !^www\. [NC]
 #RewriteRule ^(.*)$ http://www\.%{HTTP_HOST}/$1 [R=301,NC]
 
+RewriteCond %{SCRIPT_FILENAME} !-f [OR]
+RewriteCond %{SCRIPT_FILENAME} ^(.+)\.php
 RewriteRule ^([^/]+)?/?([^/]+)?/?([^/]+)?/?([^/]+)?$ index.php?controller=$1&method=$2&p1=$3&p2=$4 [QSA,L]
 #RewriteRule ^([^/]+)/([^/]+)/([^/]+)/([^/]+)$ index.php?controller=$1&method=$2&p1=$3&p2=$4 [QSA,L]
 #RewriteRule ^([^/]+)/([^/]+)/([^/]+)$ index.php?controller=$1&method=$2&p1=$3 [QSA,L]
