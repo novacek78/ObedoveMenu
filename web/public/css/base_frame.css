@@ -1,3 +1,9 @@
+@font-face {
+    font-family: 'UbuntuLight';
+    src: url('../font/Ubuntu-L.ttf'); /* IE9 Compat Modes */
+    src: url('../font/Ubuntu-L.ttf') format('truetype');
+}
+
 * {
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
     padding: 0;
@@ -57,5 +63,5 @@ div.containers {
     width: 100%;
     height: 80px;
     bottom: 0px; /* stick to bottom */
-    /*border: 1px solid red;*/
+    border-top: 1px solid #d8d8d8;
 }
