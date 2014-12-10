@@ -1,0 +1,11 @@
+input {
+    padding: 5px;
+    font-size: 1em;
+}
+
+.text_field {
+    width: 15em;
+    height: 2.1em;
+    border: 1px solid #ddd;
+    background-color: #f6f6f6;
+}

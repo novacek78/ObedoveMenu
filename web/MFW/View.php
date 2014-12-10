@@ -51,7 +51,13 @@ class MFW_View
             return array();
     }
 
-    public function loadLayout($name)
+    public function appendLayout($name)
+    {
+
+        $this->_html .= $this->getLayoutCompiledCode($name);
+    }
+
+    protected function getLayoutCompiledCode($name)
     {
 
         $filePath = explode('_', $name);
@@ -62,14 +68,24 @@ class MFW_View
         $path = implode(DIRECTORY_SEPARATOR, $filePath) . DIRECTORY_SEPARATOR . $fileName . '.php';
         if (count($filePath) > 0) $path = DIRECTORY_SEPARATOR . $path;
 
-        $full = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'Layout' . $path;
+        $fullPath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'Layout' . $path;
 
-        if (file_exists($full)) {
+        if (file_exists($fullPath)) {
             ob_start();
             $V = $this;
-            include $full;
-            $this->_html .= ob_get_clean();
+            include $fullPath;
+
+            return ob_get_clean();
         }
+    }
+
+    public function insertLayout($name, $placeholder)
+    {
+
+        if ($this->_html == '') throw new Exception('No HTML code yet. Can\'t insert layout.');
+
+        $layoutCode = $this->getLayoutCompiledCode($name);
+        $this->_html = str_replace($placeholder, $layoutCode, $this->_html);
     }
 
 //    public function compile()

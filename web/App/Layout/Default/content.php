@@ -1,3 +1,8 @@
-<h1><?php echo $V->titulok ?></h1>
-<p><?php echo $V->clanok ?></p>
-<p>LUDIA: <?php echo $V->arrayToHtml($V->ludia, '<p>Vek: #vek#, meno: #meno#</p>') ?></p>
+<div id="middle_bar">
+    <div id="content_container" class="containers">
+
+        <h1 class="content"><?php echo $V->titulok ?></h1>
+        <?php echo $V->arrayToHtml($V->clanky, '<h2 class="content">#nadpis#</h2><p class="content">#text#</p>') ?>
+
+    </div>
+</div>

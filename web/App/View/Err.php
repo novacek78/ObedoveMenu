@@ -12,9 +12,9 @@ class App_View_Err extends MFW_View
     public function render()
     {
 
-        $this->loadLayout('default_header');
-        $this->loadLayout('err');
-        $this->loadLayout('default_footer');
+        $this->appendLayout('default_header');
+        $this->appendLayout('err');
+        $this->appendLayout('default_footer');
 
         echo $this->_html;
     }

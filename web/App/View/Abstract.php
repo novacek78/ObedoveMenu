@@ -14,7 +14,9 @@ class App_View_Abstract extends MFW_View
      */
     public function __construct()
     {
-        $this->addResources('js/test.js');
-        $this->addResources('css/test.css');
+        $this->addResources('css/base_frame.css');
+        $this->addResources('css/header.css');
+        $this->addResources('css/content.css');
+        $this->addResources('css/footer.css');
     }
 }

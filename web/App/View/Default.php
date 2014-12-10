@@ -11,9 +11,9 @@ class App_View_Default extends App_View_Abstract
 
     public function render()
     {
-        $this->loadLayout('default_header');
-        $this->loadLayout('default_content');
-        $this->loadLayout('default_footer');
+        $this->appendLayout('default_header');
+        $this->appendLayout('default_content');
+        $this->appendLayout('default_footer');
 
         echo $this->_html;
     }
