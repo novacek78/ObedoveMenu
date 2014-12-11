@@ -19,5 +19,8 @@ class App_View_Abstract extends MFW_View
         $this->addResources('css/content.css');
         $this->addResources('css/footer.css');
         $this->addResources('css/responsiveness.css');
+
+        $this->appendLayout('skeleton');
+        $this->insertLayout('default_footer', 'footer_content');
     }
 }

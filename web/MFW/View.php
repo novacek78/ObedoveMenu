@@ -83,8 +83,9 @@ class MFW_View
         if ($this->_html == '') throw new Exception('No HTML code yet. Can\'t insert layout.');
 
         $layoutCode = $this->getLayoutCompiledCode($name);
+        $layoutCode = "<!-- $placeholder -->\n" . $layoutCode . "\n<!-- END OF $placeholder -->"; // pre prehladnost vysledneho HTML kodu
 
-        $this->_html = str_replace($placeholder, $layoutCode, $this->_html);
+        $this->_html = str_replace('<!-- @' . $placeholder . '@ -->', $layoutCode, $this->_html);
     }
 
 //    public function compile()

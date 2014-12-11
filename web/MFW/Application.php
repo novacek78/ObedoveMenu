@@ -21,7 +21,7 @@ class MFW_Application {
             $this->_Controller->run();
 
         } catch (Exception $e) {
-            $this->redirectToUri('/err');
+            $this->redirectToUri('err');
 //            $ErrCtrl = new App_Controller_Error(new MFW_Request());
 //            $ErrCtrl->run();
 //            echo "Vynimka : " . $e->getMessage();
