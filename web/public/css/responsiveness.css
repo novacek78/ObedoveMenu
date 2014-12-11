@@ -1,0 +1,38 @@
+@media screen and (max-width: 1050px) {
+
+    div.containers {
+        width: 90%;
+    }
+
+    h1.content {
+        font-size: 2.5em;
+    }
+
+    h2.content {
+        font-size: 1.4em;
+    }
+
+    .text_field {
+        width: 12em;
+        height: 2em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    div.containers {
+        width: 90%;
+    }
+
+    #top_bar {
+        display: none;
+    }
+
+    h1.content {
+        font-size: 2em;
+    }
+
+    h2.content {
+        font-size: 1.3em;
+    }
+}

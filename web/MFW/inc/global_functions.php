@@ -56,7 +56,8 @@ function lg($msg)
  * @param      $data
  * @param bool $bHtmlspecialchars
  */
-function vd($data, $bHtmlspecialchars = true) {
+function vd($data, $description = '', $bHtmlspecialchars = true)
+{
 
     echo '<div style="clear:both;">&nbsp;</div><pre style="font-size:14px;line-height: 1.5em;color:#000000;background: #ccffcc;padding:5px;border:1px solid #75a075;padding: 15px;">';
     $aDebug = debug_backtrace( );
@@ -71,6 +72,9 @@ function vd($data, $bHtmlspecialchars = true) {
     }
 
     echo '<p>' . $aDebug[$sDebugKey]['file'] . ':' . $aDebug[$sDebugKey]['line'] . '</p>';
+
+    if ($description != '')
+        echo "<p><b>$description :</b></p>";
 
     if (is_string($data) && $bHtmlspecialchars) {
         $data = htmlspecialchars($data);
@@ -98,8 +102,9 @@ function vd($data, $bHtmlspecialchars = true) {
  * @param      $data
  * @param bool $bHtmlspecialchars
  */
-function vde($data, $bHtmlspecialchars = true) {
+function vde($data, $description = '', $bHtmlspecialchars = true)
+{
 
-    vd($data, $bHtmlspecialchars);
+    vd($data, $description, $bHtmlspecialchars);
     exit;
 }

@@ -59,9 +59,9 @@ class MFW_View
 
     protected function getLayoutCompiledCode($name)
     {
-
         $filePath = explode('_', $name);
         $fileName = $filePath[ count($filePath) - 1 ];
+
         unset($filePath[ count($filePath) - 1 ]);
         $filePath = array_map('ucfirst', $filePath);
 
@@ -74,17 +74,16 @@ class MFW_View
             ob_start();
             $V = $this;
             include $fullPath;
-
             return ob_get_clean();
         }
     }
 
     public function insertLayout($name, $placeholder)
     {
-
         if ($this->_html == '') throw new Exception('No HTML code yet. Can\'t insert layout.');
 
         $layoutCode = $this->getLayoutCompiledCode($name);
+
         $this->_html = str_replace($placeholder, $layoutCode, $this->_html);
     }
 

@@ -1,14 +1,18 @@
 h1.content {
+    font-size: 3em;
     font-family: Ubuntu, sans-serif;
     margin-bottom: 1.25em;
 }
 
 h2.content {
+    font-size: 1.8em;
     font-family: Ubuntu, sans-serif;
     margin-bottom: 0.5em;
 }
 
 p.content {
-    margin-bottom: 1.5em;
+    margin-bottom: 2em;
     text-align: justify;
 }
+
+

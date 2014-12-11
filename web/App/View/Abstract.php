@@ -18,5 +18,6 @@ class App_View_Abstract extends MFW_View
         $this->addResources('css/header.css');
         $this->addResources('css/content.css');
         $this->addResources('css/footer.css');
+        $this->addResources('css/responsiveness.css');
     }
 }
