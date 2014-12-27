@@ -1,4 +1,4 @@
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 1000px) {
 
     div.containers {
         width: 90%;
@@ -20,14 +20,6 @@
 
 @media screen and (max-width: 600px) {
 
-    div.containers {
-        width: 90%;
-    }
-
-    #top_bar {
-        display: none;
-    }
-
     #content_container h1 {
         font-size: 2em;
     }
@@ -38,14 +30,6 @@
 }
 
 @media screen and (max-width: 450px) {
-
-    div.containers {
-        width: 90%;
-    }
-
-    #top_bar {
-        display: none;
-    }
 
     #content_container h1 {
         font-size: 1.5em;

@@ -15,16 +15,27 @@ class MFW_Application {
      */
     public function run() {
 
+        lg('----- start -----', LL_INFO);
         try {
 
             $this->_runRouter();
             $this->_Controller->run();
 
         } catch (Exception $e) {
-            $this->redirectToUri('err');
-//            $ErrCtrl = new App_Controller_Error(new MFW_Request());
-//            $ErrCtrl->run();
-//            echo "Vynimka : " . $e->getMessage();
+            lg($e->getMessage(), LL_EXCEPTION, LO_ALL_REQUEST_DATA);
+
+            switch ($e->getCode()) {
+                case EC_BAD_ROUTE:
+                case EC_CONTROLLER_NOT_EXISTS:
+                case EC_METHOD_NOT_EXISTS:
+                case EC_FILE_NOT_FOUND:
+                    $this->redirectToUri('404');
+                    break;
+
+                default:
+                    $this->redirectToUri('err');
+                    break;
+            }
         }
     }
 
@@ -36,7 +47,7 @@ class MFW_Application {
 
         $Request = new MFW_Request();
 
-        $controllerName = ucfirst(($Request->getGet('controller')) ? $Request->getGet('controller') : 'default');
+        $controllerName = ucfirst(($Request->getGet('controller')) ? $Request->getGet('controller') : 'about');
 
         $controllerClass = 'App_Controller_' . $controllerName;
 
@@ -48,6 +59,7 @@ class MFW_Application {
 
         $uri = MFW_Config::getConfig('main')->base_href . $uri;
         header('location: http://' . $uri);
+        exit;
     }
 
 }

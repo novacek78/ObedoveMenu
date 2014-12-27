@@ -1,5 +1,13 @@
-<form action="/login" method="post">
-    <input type="text" name="login_name" class="text_field"/>
-    <input type="password" name="password" class="text_field"/>
-    <input type="submit" value="Prihlásiť" class="button">
-</form>
+<div id="left_panel" class="header_panel">
+
+</div>
+<div id="center_panel" class="header_panel">
+
+    <a class="top_menu_item" href="/">Úvod</a>
+    |
+    <a class="top_menu_item" href="/login">Prihlásenie</a>
+
+</div>
+<div id="right_panel" class="header_panel">
+
+</div>

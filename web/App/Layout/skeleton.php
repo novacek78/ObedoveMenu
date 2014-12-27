@@ -16,7 +16,8 @@
 <![endif]-->
 
 <div id="page_container">
-    <div id="top_bar">
+
+<div id="top_bar">
         <div id="header_container" class="containers">
 
             <!-- @header_content@ -->

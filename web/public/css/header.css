@@ -1,11 +1,29 @@
-input {
-    padding: 5px;
-    font-size: 1em;
+.header_panel {
+    display: inline-block;
+    margin: 0;
 }
 
-.text_field {
-    width: 15em;
-    height: 2.1em;
-    border: 1px solid #ddd;
-    background-color: #f6f6f6;
+#left_panel {
+    text-align: left;
+    float: left;
+}
+
+#center_panel {
+    text-align: center;
+}
+
+#right_panel {
+    text-align: right;
+    float: right;
+}
+
+.top_menu_item {
+    color: #aaa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.top_menu_item:hover {
+    color: #000;
 }

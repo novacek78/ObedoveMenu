@@ -6,10 +6,12 @@ class App_Controller_Err extends MFW_Controller
 
     public function run()
     {
+        //TODO odmailovat adminovi, ze o tomto case sa stala chyba
+
         $V = new App_View_Err();
 
-        $V->titulok = 'Nastala chybicka';
-        $V->clanok = 'Stala sa nejaka chyba, prosim kontaktujte nas na adrese: ' . MFW_Config::getConfig('email')->from_email;
+        $V->titulok = 'Nastala chybička';
+        $V->clanok = 'Vyskytla sa chyba, prosím kontaktujte nás na adrese: ' . MFW_Config::getConfig('email')->from_email;
 
         $V->render();
     }

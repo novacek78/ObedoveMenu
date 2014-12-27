@@ -1,11 +1,12 @@
 <?php
 
-class App_Controller_Default extends MFW_Controller {
+class App_Controller_About extends MFW_Controller
+{
 
 
     public function run() {
 
-        $V = new App_View_Default();
+        $V = new App_View_About();
 
         $V->titulok = 'Obedové menu na Váš stôl.<br />Denne čerstvé.';
 

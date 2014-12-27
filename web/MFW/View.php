@@ -57,6 +57,12 @@ class MFW_View
         $this->_html .= $this->getLayoutCompiledCode($name);
     }
 
+    /**
+     * Inkluduje a aj vykona kod v PHP subore layoutu
+     *
+     * @param string $name
+     * @return string Vystup PHP kodu zo suboru layoutu
+     */
     protected function getLayoutCompiledCode($name)
     {
         $filePath = explode('_', $name);
@@ -78,12 +84,18 @@ class MFW_View
         }
     }
 
-    public function insertLayout($name, $placeholder)
+    /**
+     * Na miesto PLACEHOLDER textu vlozi skript (HTML kod) zo suboru NAME
+     *
+     * @param string $name
+     * @param string $placeholder
+     */
+    public function injectLayout($name, $placeholder)
     {
         if ($this->_html == '') throw new Exception('No HTML code yet. Can\'t insert layout.');
 
         $layoutCode = $this->getLayoutCompiledCode($name);
-        $layoutCode = "<!-- $placeholder -->\n" . $layoutCode . "\n<!-- END OF $placeholder -->"; // pre prehladnost vysledneho HTML kodu
+        $layoutCode = "\n<!-- $placeholder -->\n" . $layoutCode . "\n<!-- END OF $placeholder -->"; // pre prehladnost vysledneho HTML kodu
 
         $this->_html = str_replace('<!-- @' . $placeholder . '@ -->', $layoutCode, $this->_html);
     }
