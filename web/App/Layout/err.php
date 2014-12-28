@@ -1,2 +1,2 @@
-<h1 class="content"><?php echo $V->titulok ?></h1>
-<p class="content"><?php echo $V->clanok ?></p>
+<h1 class="content">#titulok#</h1>
+<p class="content">#clanok#</p>

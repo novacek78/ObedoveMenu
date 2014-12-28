@@ -9,13 +9,12 @@
 class App_View_Err extends App_View_Abstract
 {
 
-    public function render()
+    public function __construct()
     {
+        parent::__construct();
 
-        $this->injectLayout('default_header', 'header_content');
-        $this->injectLayout('err', 'main_content');
-        $this->injectLayout('default_footer', 'footer_content');
-
-        echo $this->_html;
+        $this->insertLayout('default_header', 'header_content');
+        $this->insertLayout('err', 'main_content');
+        $this->insertLayout('default_footer', 'footer_content');
     }
 }

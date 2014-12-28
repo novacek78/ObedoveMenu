@@ -8,38 +8,24 @@
  */
 class MFW_View
 {
-
+    protected $_layout;
     protected $_contentData = array();
     protected $_resources = array();
-    protected $_html = '';
+    private $_html = '';
 
-
-    /**
-     * Spusti rendrovanie obsahu
-     */
-    public function render()
-    {
-
-    }
 
     public function __get($name)
     {
-
-        return $this->_contentData[ $name ];
+        if (($name == 'css') || ($name == 'js')) {
+            return $this->getResources($name);
+        } else
+            return $this->_contentData[ $name ];
     }
 
     public function __set($name, $value)
     {
 
         $this->_contentData[ $name ] = $value;
-    }
-
-    public function addResources($filename)
-    {
-
-        $ext = substr($filename, strrpos($filename, '.') + 1);
-
-        $this->_resources[ $ext ][] = MFW_Config::getConfig('main')->resources_dir . $filename;
     }
 
     public function getResources($type)
@@ -51,10 +37,69 @@ class MFW_View
             return array();
     }
 
-    public function appendLayout($name)
+    public function echoHtml()
     {
+        if ($this->_html == '') $this->_compile();
 
-        $this->_html .= $this->getLayoutCompiledCode($name);
+        echo $this->_html;
+
+        return true;
+    }
+
+    protected function _compile()
+    {
+        $lastSharpPos = 0;
+        $html = $this->_layout;
+
+        while ($sharpPos = strpos($html, '#', $lastSharpPos)) {
+            if (substr($html, $sharpPos + 1, 5) == 'begin') {
+
+                $blockHeaderStart = $sharpPos;
+                $blockHeaderEnd = strpos($html, '#', $blockHeaderStart + 1);
+
+                $identifier = substr($html, $blockHeaderStart + 7, $blockHeaderEnd - $blockHeaderStart - 7);
+
+                $blockFooterStart = strpos($html, '#end:' . $identifier . '#', $sharpPos + 1);
+
+                $arrayItemCode = substr($html, $blockHeaderEnd + 1, $blockFooterStart - $blockHeaderEnd - 1);
+
+                $arrayItems = '';
+                if (is_array($this->$identifier)) {
+
+                    foreach ($this->$identifier as $item) {
+
+                        $arrayItems .= preg_replace_callback('#(\#\w+\#)#',
+                                function ($matches) use ($item) {
+                                    $najdene = str_replace('#', '', $matches[0]);
+                                    if (is_array($item))
+                                        return $item[ $najdene ];
+                                    else
+                                        return $item;
+                                }, $arrayItemCode) . "\n";
+                    }
+                }
+
+                $html = substr_replace($html, $arrayItems, $blockHeaderStart, strlen('#begin:' . $identifier . '#' . $arrayItemCode . '#end:' . $identifier . '#'));
+
+            } elseif (substr($html, $sharpPos + 1, 6) == 'config') {
+
+                $endSharpPos = strpos($html, '#', $sharpPos + 1);
+                $placeholder = substr($html, $sharpPos + 8, $endSharpPos - $sharpPos - 8);
+
+                list($cfgName, $valName) = explode(':', $placeholder);
+
+                $value = MFW_Config::getConfig($cfgName)->$valName;
+                $html = substr_replace($html, $value, $sharpPos, $endSharpPos - $sharpPos + 1);
+
+            } else {
+                $endSharpPos = strpos($html, '#', $sharpPos + 1);
+                $identifier = substr($html, $sharpPos + 1, $endSharpPos - $sharpPos - 1);
+                $html = substr_replace($html, $this->$identifier, $sharpPos, $endSharpPos - $sharpPos + 1);
+            }
+
+            $lastSharpPos = $sharpPos + 1;
+        }
+        $this->_html = $html;
     }
 
     /**
@@ -63,41 +108,72 @@ class MFW_View
      * @param string $name
      * @return string Vystup PHP kodu zo suboru layoutu
      */
-    protected function getLayoutCompiledCode($name)
+//    protected function getLayoutCompiledCode($name)
+//    {
+//        $filePath = explode('_', $name);
+//        $fileName = $filePath[ count($filePath) - 1 ];
+//
+//        unset($filePath[ count($filePath) - 1 ]);
+//        $filePath = array_map('ucfirst', $filePath);
+//
+//        $path = implode(DIRECTORY_SEPARATOR, $filePath) . DIRECTORY_SEPARATOR . $fileName . '.php';
+//        if (count($filePath) > 0) $path = DIRECTORY_SEPARATOR . $path;
+//
+//        $fullPath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'Layout' . $path;
+//
+//        if (file_exists($fullPath)) {
+//            ob_start();
+//            $V = $this;
+//            include $fullPath;
+//            return ob_get_clean();
+//        }
+//    }
+
+
+    public function addResources($filename)
     {
-        $filePath = explode('_', $name);
-        $fileName = $filePath[ count($filePath) - 1 ];
 
-        unset($filePath[ count($filePath) - 1 ]);
-        $filePath = array_map('ucfirst', $filePath);
+        $ext = substr($filename, strrpos($filename, '.') + 1);
 
-        $path = implode(DIRECTORY_SEPARATOR, $filePath) . DIRECTORY_SEPARATOR . $fileName . '.php';
-        if (count($filePath) > 0) $path = DIRECTORY_SEPARATOR . $path;
-
-        $fullPath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'Layout' . $path;
-
-        if (file_exists($fullPath)) {
-            ob_start();
-            $V = $this;
-            include $fullPath;
-            return ob_get_clean();
-        }
+        $this->_resources[ $ext ][] = MFW_Config::getConfig('main')->resources_dir . $filename;
     }
 
     /**
-     * Na miesto PLACEHOLDER textu vlozi skript (HTML kod) zo suboru NAME
+     * Vlozi do pohladu layout
+     * Ak nie je zadefinovany PLACEHOLDER, tak ho prilepi na koniec existujuceho layoutu,
+     * ale ak je zadefinovany, tak v existujucom layoute vyhlada PLACEHOLDER a namiesto neho vlozi novy layout.
      *
-     * @param string $name
-     * @param string $placeholder
+     * @param string $name Meno layoutu - napr. 'default_footer' alebo 'header'
+     * @param string $placeholder Znacka v existujucom layoute, ktora bude vyhladana a tam vlozeny layout
      */
-    public function injectLayout($name, $placeholder)
+    public function insertLayout($name, $placeholder = NULL)
     {
-        if ($this->_html == '') throw new Exception('No HTML code yet. Can\'t insert layout.');
+        if ($placeholder == NULL)
+            $this->_layout .= $this->_getLayoutCode($name);
+        else {
+            $layoutPlaceholder = '<!-- @' . $placeholder . '@ -->';
+            $layoutCode = "\n<!-- $placeholder -->\n" . $this->_getLayoutCode($name) . "\n<!-- END OF $placeholder -->"; // pre prehladnost vysledneho HTML kodu
+            $this->_layout = str_replace($layoutPlaceholder, $layoutCode, $this->_layout);
+        }
+    }
 
-        $layoutCode = $this->getLayoutCompiledCode($name);
-        $layoutCode = "\n<!-- $placeholder -->\n" . $layoutCode . "\n<!-- END OF $placeholder -->"; // pre prehladnost vysledneho HTML kodu
+    protected function _getLayoutCode($name)
+    {
+        $pathSegments = explode('_', $name);
+        $fileName = $pathSegments[ count($pathSegments) - 1 ];
 
-        $this->_html = str_replace('<!-- @' . $placeholder . '@ -->', $layoutCode, $this->_html);
+        unset($pathSegments[ count($pathSegments) - 1 ]);
+        $pathSegments = array_map('ucfirst', $pathSegments);
+
+        $filePath = implode(DIRECTORY_SEPARATOR, $pathSegments) . DIRECTORY_SEPARATOR . $fileName . '.php';
+        if (count($pathSegments) > 0) $filePath = DIRECTORY_SEPARATOR . $filePath;
+
+        $fullFilePath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'Layout' . $filePath;
+
+        if (file_exists($fullFilePath)) {
+            return trim(file_get_contents($fullFilePath), " \t\n\r\0\x0B\xEF\xBB\xBF");
+        } else
+            return false;
     }
 
 //    public function compile()
@@ -121,34 +197,34 @@ class MFW_View
      * @param bool   $associativeArray
      * @return string
      */
-    private function arrayToHtml($pole, $htmlMarkup, $associativeArray = true)
-    {
-        if (!is_array($pole)) exit;
-
-        $result = '';
-        foreach ($pole as $item) {
-
-            if ($associativeArray) {
-
-                $i = 0;
-                if (!is_array($item)) throw new Exception('Array supplied is only 1D');
-                foreach ($item as $key => $val) {
-                    $patterns[ $i ] = '/#' . $key . '#/';
-                    $i++;
-                }
-            } else {
-
-                if (is_array($item)) {
-                    for ($i = 0; $i < count($item); $i++) {
-                        $patterns[ $i ] = '/#' . $i . '#/';
-                    }
-                } else
-                    $patterns = '/#0#/';
-            }
-
-            $result .= preg_replace($patterns, $item, $htmlMarkup) . "\n";
-        }
-
-        return $result;
-    }
+//    private function arrayToHtml($pole, $htmlMarkup, $associativeArray = true)
+//    {
+//        if (!is_array($pole)) exit;
+//
+//        $result = '';
+//        foreach ($pole as $item) {
+//
+//            if ($associativeArray) {
+//
+//                $i = 0;
+//                if (!is_array($item)) throw new Exception('Array supplied is only 1D');
+//                foreach ($item as $key => $val) {
+//                    $patterns[ $i ] = '/#' . $key . '#/';
+//                    $i++;
+//                }
+//            } else {
+//
+//                if (is_array($item)) {
+//                    for ($i = 0; $i < count($item); $i++) {
+//                        $patterns[ $i ] = '/#' . $i . '#/';
+//                    }
+//                } else
+//                    $patterns = '/#0#/';
+//            }
+//
+//            $result .= preg_replace($patterns, $item, $htmlMarkup) . "\n";
+//        }
+//
+//        return $result;
+//    }
 }

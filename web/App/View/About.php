@@ -9,12 +9,13 @@
 class App_View_About extends App_View_Abstract
 {
 
-    public function render()
+    public function __construct()
     {
-        $this->injectLayout('default_header', 'header_content');
-        $this->injectLayout('about_content', 'main_content');
-        $this->injectLayout('default_footer', 'footer_content');
+        parent::__construct();
 
-        echo $this->_html;
+        $this->insertLayout('default_header', 'header_content');
+        $this->insertLayout('about_content', 'main_content');
+        $this->insertLayout('default_footer', 'footer_content');
     }
+
 }

@@ -25,7 +25,6 @@ class App_Controller_About extends MFW_Controller
             ],
         ];
 
-        $V->render();
+        $V->echoHtml();
     }
-
 }

@@ -28,7 +28,7 @@ final class MFW_Config
             self::$_instance = new MFW_Config();
         }
 
-        self::_loadConfigFile($cfgName);
+        self::$_instance->_loadConfigFile($cfgName);
 
         return self::$_instance;
     }

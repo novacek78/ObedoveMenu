@@ -11,7 +11,7 @@ class App_Controller_404 extends MFW_Controller
         $V->titulok = 'Stránka nenájdená';
         $V->clanok = 'Žiaľ stránka, ktorú žiadate sa tu nenachádza. Prosím skontrolujte správnosť zadania URL adresy.';
 
-        $V->render();
+        $V->echoHtml();
     }
 
 }

@@ -2,7 +2,7 @@
 
 
 spl_autoload_register('loadClass');
-register_shutdown_function( 'fatalHandler' );
+register_shutdown_function('exitScript');
 
 
 /**
@@ -35,7 +35,8 @@ function loadClass($className)
     }
 }
 
-function fatalHandler() {
+function exitScript()
+{
     $errfile = "unknown file";
     $errstr  = "shutdown";
     $errno   = E_CORE_ERROR;
@@ -48,7 +49,7 @@ function fatalHandler() {
         $errfile = $error["file"];
         $errline = $error["line"];
         $errstr  = $error["message"];
-        lg('Fatal error handler: ' . "ErrNo:$errno , ErrFile:$errfile , ErrLine:$errline , ErrStr:$errstr");
+        lg('Fatal error handler: ' . "ErrNo:$errno , ErrFile:$errfile , ErrLine:$errline , ErrStr:$errstr", LL_ERROR);
 
         //TODO dorobit logovanie / mailovanie chyby
     }
@@ -63,7 +64,15 @@ function fatalHandler() {
  */
 function lg($msg, $level = LL_DEBUG, $options = 0)
 {
-    $f = fopen($_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'log.txt', 'a');
+    $f = fopen(
+        $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .
+        $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR .
+        'logs' . DIRECTORY_SEPARATOR .
+        'log.txt', 'a');
+
+    if (!$f) {
+        return false;
+    }
 
     switch ($level) {
         case LL_DEBUG:

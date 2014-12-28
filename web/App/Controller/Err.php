@@ -13,7 +13,7 @@ class App_Controller_Err extends MFW_Controller
         $V->titulok = 'Nastala chybička';
         $V->clanok = 'Vyskytla sa chyba, prosím kontaktujte nás na adrese: ' . MFW_Config::getConfig('email')->from_email;
 
-        $V->render();
+        $V->echoHtml();
     }
 
 }

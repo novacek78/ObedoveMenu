@@ -12,7 +12,7 @@ class App_Controller_Login extends MFW_Controller
 
         $V->titulok = 'Prihlásenie';
 
-        $V->render();
+        $V->echoHtml();
     }
 
 }
