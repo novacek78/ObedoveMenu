@@ -6,12 +6,13 @@
  * Date: 2. 12. 2014
  * Time: 15:20
  */
-class MFW_View
+abstract class MFW_View
 {
-    protected $_layout;
+    protected $_layout = '';
     protected $_contentData = array();
     protected $_resources = array();
     private $_html = '';
+
 
 
     public function __get($name)
@@ -24,19 +25,29 @@ class MFW_View
 
     public function __set($name, $value)
     {
-
         $this->_contentData[ $name ] = $value;
     }
 
     public function getResources($type)
     {
-
         if (isset($this->_resources[ $type ]))
             return $this->_resources[ $type ];
         else
             return array();
     }
 
+    public function addResources($filename)
+    {
+        $ext = substr($filename, strrpos($filename, '.') + 1);
+
+        $this->_resources[ $ext ][] = MFW_Config::getConfig('main')->resources_dir . $filename;
+    }
+
+    /**
+     * Vypise na vystup cely konecny HTML kod pohladu aj s vlozenymi datami.
+     *
+     * @return bool
+     */
     public function echoHtml()
     {
         if ($this->_html == '') $this->_compile();
@@ -46,6 +57,12 @@ class MFW_View
         return true;
     }
 
+    /**
+     * 'Skompiluje' layout pohladu - resp.nahradi vsetky placeholdery v layoute zodpovedajucimi datami
+     * a vysledny HTML kod ulozi do protected premennej _html
+     *
+     * @return bool
+     */
     protected function _compile()
     {
         $lastSharpPos = 0;
@@ -100,42 +117,8 @@ class MFW_View
             $lastSharpPos = $sharpPos + 1;
         }
         $this->_html = $html;
-    }
 
-    /**
-     * Inkluduje a aj vykona kod v PHP subore layoutu
-     *
-     * @param string $name
-     * @return string Vystup PHP kodu zo suboru layoutu
-     */
-//    protected function getLayoutCompiledCode($name)
-//    {
-//        $filePath = explode('_', $name);
-//        $fileName = $filePath[ count($filePath) - 1 ];
-//
-//        unset($filePath[ count($filePath) - 1 ]);
-//        $filePath = array_map('ucfirst', $filePath);
-//
-//        $path = implode(DIRECTORY_SEPARATOR, $filePath) . DIRECTORY_SEPARATOR . $fileName . '.php';
-//        if (count($filePath) > 0) $path = DIRECTORY_SEPARATOR . $path;
-//
-//        $fullPath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'Layout' . $path;
-//
-//        if (file_exists($fullPath)) {
-//            ob_start();
-//            $V = $this;
-//            include $fullPath;
-//            return ob_get_clean();
-//        }
-//    }
-
-
-    public function addResources($filename)
-    {
-
-        $ext = substr($filename, strrpos($filename, '.') + 1);
-
-        $this->_resources[ $ext ][] = MFW_Config::getConfig('main')->resources_dir . $filename;
+        return true;
     }
 
     /**
@@ -157,24 +140,60 @@ class MFW_View
         }
     }
 
+    /**
+     * Nacita zo suboru HTML kod layoutu
+     *
+     * @param $name
+     * @return bool|string HTML kod layoutu
+     */
     protected function _getLayoutCode($name)
     {
         $pathSegments = explode('_', $name);
         $fileName = $pathSegments[ count($pathSegments) - 1 ];
 
         unset($pathSegments[ count($pathSegments) - 1 ]);
-        $pathSegments = array_map('ucfirst', $pathSegments);
+//        $pathSegments = array_map('ucfirst', $pathSegments);
 
         $filePath = implode(DIRECTORY_SEPARATOR, $pathSegments) . DIRECTORY_SEPARATOR . $fileName . '.php';
         if (count($pathSegments) > 0) $filePath = DIRECTORY_SEPARATOR . $filePath;
 
-        $fullFilePath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'Layout' . $filePath;
+        $fullFilePath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'layout' . $filePath;
 
         if (file_exists($fullFilePath)) {
             return trim(file_get_contents($fullFilePath), " \t\n\r\0\x0B\xEF\xBB\xBF");
         } else
             return false;
     }
+
+
+    /**
+     * Inkluduje a aj vykona kod v PHP subore layoutu
+     *
+     * @param string $name
+     * @return string Vystup PHP kodu zo suboru layoutu
+     */
+//    protected function getLayoutCompiledCode($name)
+//    {
+//        $filePath = explode('_', $name);
+//        $fileName = $filePath[ count($filePath) - 1 ];
+//
+//        unset($filePath[ count($filePath) - 1 ]);
+//        $filePath = array_map('ucfirst', $filePath);
+//
+//        $path = implode(DIRECTORY_SEPARATOR, $filePath) . DIRECTORY_SEPARATOR . $fileName . '.php';
+//        if (count($filePath) > 0) $path = DIRECTORY_SEPARATOR . $path;
+//
+//        $fullPath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'layout' . $path;
+//
+//        if (file_exists($fullPath)) {
+//            ob_start();
+//            $V = $this;
+//            include $fullPath;
+//            return ob_get_clean();
+//        }
+//    }
+
+
 
 //    public function compile()
 //    {

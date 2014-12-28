@@ -2,13 +2,16 @@
 
 class MFW_Application {
 
+    /**
+     * @var MFW_Controller
+     */
     protected $_Controller;
+
 
 
     public function __construct(){
 
     }
-
 
     /**
      * Spusti aplikaciu
@@ -20,6 +23,7 @@ class MFW_Application {
 
             $this->_runRouter();
             $this->_Controller->run();
+            $this->_Controller->renderView();
 
         } catch (Exception $e) {
             lg($e->getMessage(), LL_EXCEPTION, LO_ALL_REQUEST_DATA);
