@@ -10,3 +10,7 @@ input {
     border: 1px solid #ddd;
     background-color: #f6f6f6;
 }
+
+#submitLogin {
+    margin-bottom: 3em;
+}

@@ -5,7 +5,7 @@
     <form action="/login" method="post">
         Meno: <input type="text" name="login_name" class="text_field" id="loginField"/><br/>
         Heslo: <input type="password" name="password" class="text_field"/><br/>
-        <input type="submit" value="Prihlásiť" class="submit_login">
+        <input type="submit" value="Prihlásiť" id="submitLogin">
     </form>
 
 </div>
