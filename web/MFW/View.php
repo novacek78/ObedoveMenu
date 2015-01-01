@@ -178,7 +178,7 @@ abstract class MFW_View
         unset($pathSegments[ count($pathSegments) - 1 ]);
 //        $pathSegments = array_map('ucfirst', $pathSegments);
 
-        $filePath = implode(DIRECTORY_SEPARATOR, $pathSegments) . DIRECTORY_SEPARATOR . $fileName . '.php';
+        $filePath = implode(DIRECTORY_SEPARATOR, $pathSegments) . DIRECTORY_SEPARATOR . $fileName . '.html';
         if (count($pathSegments) > 0) $filePath = DIRECTORY_SEPARATOR . $filePath;
 
         $fullFilePath = $_SERVER['APP_PATH'] . DIRECTORY_SEPARATOR . 'layout' . $filePath;
