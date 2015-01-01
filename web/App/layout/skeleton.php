@@ -6,12 +6,12 @@
     <title>SpapajMa - obedové menu vždy poruke</title>
     <link href='http://fonts.googleapis.com/css?family=Ubuntu:300&subset=latin,latin-ext' rel='stylesheet'
           type='text/css'>
-    #begin:css#
+    #array:css#
     <link href="#0#" media="all" rel="stylesheet" type="text/css"/>
-    #end:css#
-    #begin:js#
+    #endarray:css#
+    #array:js#
     <script src="#0#" type="text/javascript"></script>
-    #end:js#
+    #endarray:js#
 </head>
 <body>
 

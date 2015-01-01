@@ -19,8 +19,10 @@ abstract class MFW_View
     {
         if (($name == 'css') || ($name == 'js')) {
             return $this->getResources($name);
-        } else
+        } elseif (isset($this->_contentData[ $name ]))
             return $this->_contentData[ $name ];
+        else
+            return NULL;
     }
 
     public function __set($name, $value)
@@ -50,7 +52,7 @@ abstract class MFW_View
      */
     public function echoHtml()
     {
-        if ($this->_html == '') $this->_compile();
+        if ($this->_html == '') $this->_html = $this->_compile($this->_layout);
 
         echo $this->_html;
 
@@ -63,20 +65,21 @@ abstract class MFW_View
      *
      * @return bool
      */
-    protected function _compile()
+    protected function _compile($html)
     {
         $lastSharpPos = 0;
-        $html = $this->_layout;
 
         while ($sharpPos = strpos($html, '#', $lastSharpPos)) {
-            if (substr($html, $sharpPos + 1, 5) == 'begin') {
+
+            // ak sa nasla klauzula na rendrovanie pola (#array:premenna# .... #endarray#)
+            if (substr($html, $sharpPos + 1, 5) == 'array') {
 
                 $blockHeaderStart = $sharpPos;
                 $blockHeaderEnd = strpos($html, '#', $blockHeaderStart + 1);
 
                 $identifier = substr($html, $blockHeaderStart + 7, $blockHeaderEnd - $blockHeaderStart - 7);
 
-                $blockFooterStart = strpos($html, '#end:' . $identifier . '#', $sharpPos + 1);
+                $blockFooterStart = strpos($html, '#endarray:' . $identifier . '#', $sharpPos + 1);
 
                 $arrayItemCode = substr($html, $blockHeaderEnd + 1, $blockFooterStart - $blockHeaderEnd - 1);
 
@@ -96,8 +99,9 @@ abstract class MFW_View
                     }
                 }
 
-                $html = substr_replace($html, $arrayItems, $blockHeaderStart, strlen('#begin:' . $identifier . '#' . $arrayItemCode . '#end:' . $identifier . '#'));
+                $html = substr_replace($html, $arrayItems, $blockHeaderStart, strlen('#begin:' . $identifier . '#' . $arrayItemCode . '#endarray:' . $identifier . '#'));
 
+                // ak sa nasla klauzula pre vlozenie hodnoty z konfiguracneho suboru (#config:nazov#)
             } elseif (substr($html, $sharpPos + 1, 6) == 'config') {
 
                 $endSharpPos = strpos($html, '#', $sharpPos + 1);
@@ -108,6 +112,27 @@ abstract class MFW_View
                 $value = MFW_Config::getConfig($cfgName)->$valName;
                 $html = substr_replace($html, $value, $sharpPos, $endSharpPos - $sharpPos + 1);
 
+                // ak sa nasla klauzula pre podmieneny vypis bloku (#if:premenna# ... #else# ... #endif#)
+            } elseif (substr($html, $sharpPos + 1, 2) == 'if') {
+
+                $endSharpPos = strpos($html, '#', $sharpPos + 1);
+                $variable = substr($html, $sharpPos + 4, $endSharpPos - $sharpPos - 4);
+                $endIfSharpPos = strpos($html, '#endif:' . $variable . '#', $sharpPos + 1);
+                $headerLength = 5 + strlen($variable);
+                $ifBlock = substr($html, $sharpPos + $headerLength, $endIfSharpPos - $sharpPos - $headerLength);
+                list($trueBlock, $falseBlock) = explode('#else#', $ifBlock);
+
+                $varValue = (isset($this->_contentData[ $variable ]) ? $this->$variable : NULL); // isset() ale aj !empty() na $this->$variable by stale hadzala FALSE
+                $vysledok = '';
+                if (!empty($varValue)) {
+                    if ((!is_bool($varValue)) || ((is_bool($varValue)) && ($varValue === true))) {
+                        $vysledok = $this->_compile($trueBlock);
+                    }
+                } elseif (!empty($falseBlock)) {
+                    $vysledok = $this->_compile($falseBlock);
+                }
+                $html = substr_replace($html, $vysledok, $sharpPos, $headerLength + strlen($ifBlock . '#endif:' . $variable . '#'));
+
             } else {
                 $endSharpPos = strpos($html, '#', $sharpPos + 1);
                 $identifier = substr($html, $sharpPos + 1, $endSharpPos - $sharpPos - 1);
@@ -116,9 +141,8 @@ abstract class MFW_View
 
             $lastSharpPos = $sharpPos + 1;
         }
-        $this->_html = $html;
 
-        return true;
+        return $html;
     }
 
     /**
