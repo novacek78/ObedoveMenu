@@ -158,7 +158,7 @@ abstract class MFW_View
         if ($placeholder == NULL)
             $this->_layout .= $this->_getLayoutCode($name);
         else {
-            $layoutPlaceholder = '<!-- @' . $placeholder . '@ -->';
+            $layoutPlaceholder = '<layout:' . $placeholder . '/>';
             $layoutCode = "\n<!-- $placeholder -->\n" . $this->_getLayoutCode($name) . "\n<!-- END OF $placeholder -->"; // pre prehladnost vysledneho HTML kodu
             $this->_layout = str_replace($layoutPlaceholder, $layoutCode, $this->_layout);
         }
