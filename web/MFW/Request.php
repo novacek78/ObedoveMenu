@@ -8,9 +8,9 @@
 
 class MFW_Request {
 
+    public $isPost;
     protected $_getData = NULL;
     protected $_postData = null;
-
 
     public function __construct(){
 
@@ -23,23 +23,46 @@ class MFW_Request {
             $this->_postData = $_POST;
             unset($_POST);
         }
+
+        $this->isPost = ($_SERVER['REQUEST_METHOD'] === 'POST');
     }
 
 
-    public function getGet($index){
+    public function getGetData()
+    {
 
-        if (isset($this->_getData[ $index ]))
-            return $this->_getData[ $index ];
+        if (isset($this->_getData))
+            return $this->_getData;
         else
-            return false;
+            return NULL;
     }
 
 
-    public function getPost($name){
+    public function getPostData()
+    {
+
+        if (isset($this->_postData))
+            return $this->_postData;
+        else
+            return NULL;
+    }
+
+    public function getGetParam($name)
+    {
+
+        if (isset($this->_getData[ $name ]))
+            return $this->_getData[ $name ];
+        else
+            return NULL;
+    }
+
+
+    public function getPostParam($name)
+    {
 
         if (isset($this->_postData[$name]))
             return $this->_postData[$name];
         else
-            return false;
+            return NULL;
     }
 }

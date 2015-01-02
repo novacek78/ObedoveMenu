@@ -27,6 +27,9 @@ abstract class MFW_View
 
     public function __set($name, $value)
     {
+        if (($name == 'css') || ($name == 'js'))
+            throw new Exception('Forbidden name for property: ' . $name . '. For adding resources use addResources() instead.');
+
         $this->_contentData[ $name ] = $value;
     }
 
@@ -36,6 +39,20 @@ abstract class MFW_View
             return $this->_resources[ $type ];
         else
             return array();
+    }
+
+    /**
+     * Zluci dynamicke data obsahu pohladu s datami v parametri $data
+     *
+     * @param      $data
+     * @param bool $highPriority Urcuje, ci data poslane ako argument maju prebit tie, ktore uz v pohlade nasetovane su
+     */
+    public function mergeContentData($data, $highPriority = false)
+    {
+        if ($highPriority)
+            $this->_contentData = array_merge($this->_contentData, $data);
+        else
+            $this->_contentData = array_merge($data, $this->_contentData);
     }
 
     public function addResources($filename)
@@ -52,7 +69,8 @@ abstract class MFW_View
      */
     public function echoHtml()
     {
-        if ($this->_html == '') $this->_html = $this->_compile($this->_layout);
+        if ($this->_html == '')
+            $this->_html = $this->_compile($this->_layout);
 
         echo $this->_html;
 

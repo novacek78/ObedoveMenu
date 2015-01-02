@@ -1,13 +1,14 @@
 <?php
 
-class App_Controller_About extends MFW_Controller
+class App_Controller_About extends App_Controller_Abstract
 {
 
 
     public function run()
     {
-        $this->_View = new App_View_About();
+        $V = new App_View_About();
+        $V->prihlaseny = MFW_Session::get('auth', 'login');
 
-        $this->_View->prihlaseny = 'erik';
+        $this->setView($V);
     }
 }

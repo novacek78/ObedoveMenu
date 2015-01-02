@@ -176,7 +176,7 @@ function vd($data, $description = '', $bHtmlspecialchars = true)
  */
 function vde($data, $description = '', $bHtmlspecialchars = true)
 {
-
     vd($data, $description, $bHtmlspecialchars);
     exit;
 }
+

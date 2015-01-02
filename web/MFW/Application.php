@@ -18,6 +18,8 @@ class MFW_Application {
      */
     public function run() {
 
+        session_start();
+
         lg('----- start -----', LL_INFO);
         try {
 
@@ -33,11 +35,11 @@ class MFW_Application {
                 case EC_CONTROLLER_NOT_EXISTS:
                 case EC_METHOD_NOT_EXISTS:
                 case EC_FILE_NOT_FOUND:
-                    $this->redirectToUri('404');
+                MFW_Utils::redirectToUri('404');
                     break;
 
                 default:
-                    $this->redirectToUri('err');
+                    MFW_Utils::redirectToUri('err');
                     break;
             }
         }
@@ -51,19 +53,11 @@ class MFW_Application {
 
         $Request = new MFW_Request();
 
-        $controllerName = ucfirst(($Request->getGet('controller')) ? $Request->getGet('controller') : 'about');
+        $controllerName = ucfirst(($Request->getGetParam('controller')) ? $Request->getGetParam('controller') : 'about');
 
         $controllerClass = 'App_Controller_' . $controllerName;
 
         $this->_Controller = new $controllerClass($Request);
-    }
-
-    protected function redirectToUri($uri)
-    {
-
-        $uri = MFW_Config::getConfig('main')->base_href . $uri;
-        header('location: http://' . $uri);
-        exit;
     }
 
 }
