@@ -4,7 +4,7 @@ class MFW_Utils
 {
 
 
-    public static function redirectToUri($uri)
+    public static function redirectToUri($uri = '')
     {
         if (isset($_SESSION))
             session_write_close();

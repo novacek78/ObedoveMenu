@@ -31,6 +31,14 @@ final class MFW_Session
         setcookie($name, $value, $expire, '/', NULL, NULL, true);
     }
 
+    public static function getCookie($name)
+    {
+        if (isset($_COOKIE[ $name ]))
+            return $_COOKIE[ $name ];
+        else
+            return NULL;
+    }
+
     public static function clearCookie($name)
     {
         $expire = time() - 3600 * 24;

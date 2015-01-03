@@ -8,7 +8,7 @@ class App_Controller_Login extends App_Controller_Abstract
     {
         // prihlaseny user uz nemoze vidiet prihlasovaci formular
         if ($this->prihlasenyLogin != NULL)
-            MFW_Utils::redirectToUri('about'); //FIXME redirect by mal byt niekam do casti pre prihlasenych
+            MFW_Utils::redirectToUri(); //FIXME redirect by mal byt niekam do casti pre prihlasenych
 
         // prihlasime usera
         if ($this->_isPost()) {
@@ -16,13 +16,13 @@ class App_Controller_Login extends App_Controller_Abstract
             $postData = $this->_getPostData();
 
             $User = new App_Model_User();
-            $loginResult = $User->doLogin($postData['login_name'], $postData['password']);
+            $loginResult = $User->doLogin($postData['login_name'], $postData['password'], NULL, NULL, isset($postData['remember_login']));
 
             if ($loginResult) {
-                MFW_Utils::redirectToUri('about'); //FIXME redirect by mal byt niekam do casti pre prihlasenych
+                MFW_Utils::redirectToUri(); //FIXME redirect by mal byt niekam do casti pre prihlasenych
             } else {
                 //TODO set user error message
-                MFW_Utils::redirectToUri('about');
+                MFW_Utils::redirectToUri('login');
             }
 
         } else {
