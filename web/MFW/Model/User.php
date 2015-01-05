@@ -22,7 +22,7 @@ abstract class MFW_Model_User extends MFW_Model_Abstract
 
                 $resultAuth['remember_login'] = $rememberLogin;
                 $this->_saveSessionData($resultAuth);
-                $result = true;
+                $result = $resultAuth;
             }
         } else {
             //TODO chybova hlaska ze daco chyba
@@ -46,4 +46,17 @@ abstract class MFW_Model_User extends MFW_Model_Abstract
         }
     }
 
+    /**
+     * Novy navstevnik hned pri svojej prvej navsteve dostane vygenerovane nahodne ID,
+     * podla ktoreho ho spozname ked sa vrati nabuduce.
+     * Prebehne tu 'ticha' registracia uzivatela do DB.
+     *
+     * @return string
+     */
+    public function doCreateVisitor()
+    {
+        $visitorId = $this->_DAO->registerNewVisitor();
+
+        return $visitorId;
+    }
 }

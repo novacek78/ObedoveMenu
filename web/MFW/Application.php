@@ -35,6 +35,7 @@ class MFW_Application {
                 case EC_CONTROLLER_NOT_EXISTS:
                 case EC_METHOD_NOT_EXISTS:
                 case EC_FILE_NOT_FOUND:
+                MFW_Session::addUserMessage('Stránka nenájdená', UM_ERROR);
                 MFW_Utils::redirectToUri('404');
                     break;
 

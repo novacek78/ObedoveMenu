@@ -9,22 +9,6 @@ final class MFW_Session
         $_SESSION[ $namespace ][ $name ] = $value;
     }
 
-    public static function clear($namespace, $name = NULL)
-    {
-        if ($name == NULL)
-            unset($_SESSION[ $namespace ]);
-        else
-            unset($_SESSION[ $namespace ][ $name ]);
-    }
-
-    public static function get($namespace, $name)
-    {
-        if (isset($_SESSION[ $namespace ][ $name ]))
-            return $_SESSION[ $namespace ][ $name ];
-        else
-            return NULL;
-    }
-
     public static function setCookie($name, $value, $lifetimeDays = 120)
     {
         $expire = time() + 3600 * 24 * $lifetimeDays;
@@ -45,5 +29,40 @@ final class MFW_Session
         setcookie($name, NULL, $expire, '/');
     }
 
+    public static function addUserMessage($text, $type = UM_INFO)
+    {
+        self::add('user', 'messages', ['text' => $text, 'type' => $type]);
+    }
+
+    public static function add($namespace, $arrayName, $value)
+    {
+        $_SESSION[ $namespace ][ $arrayName ][] = $value;
+    }
+
+    public static function getUserMessages($autoClear = true)
+    {
+        $ret = self::get('user', 'messages');
+
+        if ($autoClear)
+            self::clear('user', 'messages');
+
+        return $ret;
+    }
+
+    public static function get($namespace, $name)
+    {
+        if (isset($_SESSION[ $namespace ][ $name ]))
+            return $_SESSION[ $namespace ][ $name ];
+        else
+            return NULL;
+    }
+
+    public static function clear($namespace, $name = NULL)
+    {
+        if ($name == NULL)
+            unset($_SESSION[ $namespace ]);
+        else
+            unset($_SESSION[ $namespace ][ $name ]);
+    }
 
 }

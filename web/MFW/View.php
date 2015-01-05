@@ -138,7 +138,7 @@ abstract class MFW_View
                 $endIfSharpPos = strpos($html, '#endif:' . $variable . '#', $sharpPos + 1);
                 $headerLength = 5 + strlen($variable);
                 $ifBlock = substr($html, $sharpPos + $headerLength, $endIfSharpPos - $sharpPos - $headerLength);
-                list($trueBlock, $falseBlock) = explode('#else#', $ifBlock);
+                @list($trueBlock, $falseBlock) = explode('#else#', $ifBlock);
 
                 $varValue = (isset($this->_contentData[ $variable ]) ? $this->$variable : NULL); // isset() ale aj !empty() na $this->$variable by stale hadzala FALSE
                 $vysledok = '';

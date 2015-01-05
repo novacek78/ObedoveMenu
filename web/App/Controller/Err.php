@@ -11,7 +11,7 @@ class App_Controller_Err extends App_Controller_Abstract
         $V = new App_View_Err();
 
         $V->titulok = 'Nastala chybička';
-        $V->clanok = 'Vyskytla sa chyba, prosím kontaktujte nás na adrese: ' . MFW_Config::getConfig('email')->from_email;
+        $V->clanok = 'Ak neviete, prečo sa to stalo, kontaktujte nás prosím na adrese: ' . MFW_Config::getConfig('email')->from_email;
 
         $this->setView($V);
     }

@@ -6,11 +6,11 @@
 
     <a class="top_menu_item" href="/">Úvod</a>
     |
-    #if:prihlasenyLogin#
-    <a class="top_menu_item" href="/logout">Odhlásiť (#prihlasenyLogin#)</a>
+    #if:userLogin#
+    <a class="top_menu_item" href="/logout">Odhlásiť (#userLogin#)</a>
     #else#
     <a class="top_menu_item" href="/login">Prihlásenie</a>
-    #endif:prihlasenyLogin#
+    #endif:userLogin#
 
 </div>
 

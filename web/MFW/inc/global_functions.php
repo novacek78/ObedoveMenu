@@ -128,10 +128,12 @@ function lg($msg, $level = LL_DEBUG, $options = 0)
  * @param      $data
  * @param bool $bHtmlspecialchars
  */
-function vd($data, $description = '', $bHtmlspecialchars = true)
+function vd($data, $description = '', $level = 1, $bHtmlspecialchars = true)
 {
+    $level--; // indexovane od nuly
+    $levelColors = ['ccffcc', 'ccccff', 'ffcccc'];
 
-    echo '<div style="clear:both;">&nbsp;</div><pre style="font-size:14px;line-height: 1.5em;color:#000000;background: #ccffcc;padding:5px;border:1px solid #75a075;padding: 15px;">';
+    echo '<div style="clear:both;">&nbsp;</div><pre style="font-size:14px;line-height: 1.5em;color:#000000;background: #' . $levelColors[ $level ] . ';border:1px solid #75a075;padding: 15px;margin-left: ' . ($level * 2) . 'em">';
     $aDebug = debug_backtrace( );
     $sDebugKey = false;
 

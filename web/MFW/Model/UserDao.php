@@ -19,4 +19,12 @@ class MFW_Model_UserDao extends MFW_Model_AbstractDao
         return $result;
     }
 
+    public function registerNewVisitor()
+    {
+
+        //TODO zaregistrovat navstevnika do DB
+
+        $newVisitorId = mt_rand(); //FIXME toto je len docasne - ID budu autoincrement z DB
+        return $newVisitorId;
+    }
 }

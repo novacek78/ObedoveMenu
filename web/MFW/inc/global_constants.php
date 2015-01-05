@@ -23,4 +23,8 @@ define('EC_METHOD_NOT_EXISTS', 120);
 define('EC_PAGE_NOT_FOUND', 140);
 define('EC_FILE_NOT_FOUND', 200);
 
-//
+// user message types
+define('UM_INFO', 'Informácia');
+define('UM_CONFIRM', 'Potvrdenie');
+define('UM_WARN', 'Upozornenie');
+define('UM_ERROR', 'Chyba');

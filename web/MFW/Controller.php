@@ -13,6 +13,12 @@ abstract class MFW_Controller
      */
     protected $_Request;
     protected $_contentData = array();
+
+    // ak je v tomto daco, treba to pridat do vlastnosti pohladu este pred rendrovanim
+    // takto sa daju priradovat properties (data) pohladu este pred tym, nez je vytvoreny
+    // (napr. v konstruktore App_Controller_Abstract)
+    protected $_viewProperties = NULL;
+
     /**
      * @var MFW_View
      */
@@ -54,6 +60,11 @@ abstract class MFW_Controller
     public function setView(MFW_View $view)
     {
         $this->_View = $view;
+
+        if (!empty($this->_viewProperties))
+            foreach ($this->_viewProperties as $name => $value)
+                $this->_View->$name = $value;
+
         $this->_View->mergeContentData($this->_contentData);
     }
 
